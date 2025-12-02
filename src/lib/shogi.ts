@@ -131,7 +131,7 @@ export function parseMove(moveStr: string, state: GameState): {
   promote: boolean;
 } | null {
   // 打つ場合（持ち駒から）
-  const dropMatch = moveStr.match(/([１-９1-9])([一-九])(.+)打/);
+  const dropMatch = moveStr.match(/([１-９1-9])([一二三四五六七八九])(.+)打/);
   if (dropMatch) {
     const to = parsePosition(dropMatch[1] + dropMatch[2]);
     if (!to) return null;
@@ -139,7 +139,7 @@ export function parseMove(moveStr: string, state: GameState): {
   }
 
   // 移動の場合
-  const moveMatch = moveStr.match(/([１-９1-9])([一-九])(.+?)(成)?$/);
+  const moveMatch = moveStr.match(/([１-９1-9])([一二三四五六七八九])(.+?)(成)?$/);
   if (moveMatch) {
     const to = parsePosition(moveMatch[1] + moveMatch[2]);
     if (!to) return null;
@@ -172,7 +172,7 @@ export function applyMove(
 
   // 打の場合
   if (moveStr.includes("打")) {
-    const match = moveStr.match(/([１-９1-9])([一-九])(.+)打/);
+    const match = moveStr.match(/([１-９1-9])([一二三四五六七八九])(.+)打/);
     if (!match) return { success: false, newState: state, message: "指し手を理解できませんでした" };
 
     const to = parsePosition(match[1] + match[2]);
@@ -192,7 +192,7 @@ export function applyMove(
 
   } else {
     // 移動の場合
-    const match = moveStr.match(/([１-９1-9])([一-九])(.+?)(成)?$/);
+    const match = moveStr.match(/([１-９1-9])([一二三四五六七八九])(.+?)(成)?$/);
     if (!match) return { success: false, newState: state, message: "指し手を理解できませんでした" };
 
     const to = parsePosition(match[1] + match[2]);
