@@ -47,7 +47,7 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
         "X-Title": "Shogi Chat AI",
       },
       body: JSON.stringify({
-        model: "google/gemma-3-1b-it:free", // 無料モデル
+        model: "x-ai/grok-4.1-fast:free", // 無料モデル
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: boardText + "\n\nあなたの番です。次の一手を指してください。" }
@@ -73,7 +73,7 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
     return NextResponse.json({
       move: extractedMove,
       rawResponse: aiMove,
-      model: "google/gemma-3-1b-it:free"
+      model: "x-ai/grok-4.1-fast:free"
     });
 
   } catch (error) {
