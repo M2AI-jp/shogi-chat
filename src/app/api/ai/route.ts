@@ -51,7 +51,7 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
         "X-Title": "Shogi Chat AI",
       },
       body: JSON.stringify({
-        model: "qwen/qwen3-4b:free", // 最速の軽量無料モデル
+        model: "nvidia/nemotron-nano-9b-v2:free", // NVIDIA軽量モデル
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: boardText + "\n\nあなたの番です。次の一手を指してください。" }
@@ -79,7 +79,7 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
     return NextResponse.json({
       move: extractedMove,
       rawResponse: aiMove,
-      model: "qwen/qwen3-4b:free"
+      model: "nvidia/nemotron-nano-9b-v2:free"
     });
 
   } catch (error) {
