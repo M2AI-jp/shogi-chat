@@ -38,6 +38,10 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
 成る場合は「3三角成」、打つ場合は「5五歩打」と書いてください。
 必ず合法手を指してください。簡潔に1手だけ回答してください。`;
 
+    // タイムアウト付きfetch
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒タイムアウト
+
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -47,15 +51,17 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
         "X-Title": "Shogi Chat AI",
       },
       body: JSON.stringify({
-        model: "x-ai/grok-4.1-fast:free", // 無料モデル
+        model: "google/gemma-3-4b-it:free", // より軽量な無料モデル
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: boardText + "\n\nあなたの番です。次の一手を指してください。" }
         ],
-        max_tokens: 100,
-        temperature: 0.7,
+        max_tokens: 50,
+        temperature: 0.5,
       }),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -73,11 +79,14 @@ K/k=王/玉, R/r=飛, B/b=角, G/g=金, S/s=銀, N/n=桂, L/l=香, P/p=歩
     return NextResponse.json({
       move: extractedMove,
       rawResponse: aiMove,
-      model: "x-ai/grok-4.1-fast:free"
+      model: "google/gemma-3-4b-it:free"
     });
 
   } catch (error) {
     console.error("Error:", error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json({ error: "AI応答タイムアウト（15秒）", move: "3四歩" }, { status: 200 });
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
